@@ -21,13 +21,14 @@ import java.util.logging.Logger;
  * This class implements the client side of the protocol specification (version 1).
  * 
  * @author Olivier Liechti
+ * @author Tony Clavien
  */
 public class RouletteV1ClientImpl implements IRouletteV1Client {
 
   private static final Logger LOG = Logger.getLogger(RouletteV1ClientImpl.class.getName());
   private Socket socket = null;
-  private BufferedReader reader;
-  private PrintWriter writer;
+  private BufferedReader reader = null;
+  private PrintWriter writer = null;
 
   @Override
   public void connect(String server, int port) throws IOException {
@@ -76,7 +77,10 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 	  // Send the message to the server
 	  writer.println(RouletteV1Protocol.CMD_LOAD);
 	  // flush the buffers
-	 flush();
+	  writer.flush();
+	  
+	  // Read the message Send your data ...
+	  reader.readLine();
 	  
 	  // send data
 	  for(Student s : students)
@@ -88,7 +92,10 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 	  // close the load
 	  writer.println(RouletteV1Protocol.CMD_LOAD_ENDOFDATA_MARKER);
 	  // flush the streams
-	  flush();
+	  writer.flush();
+	  
+	  // read the end load message
+	  reader.readLine();
   }
 
   @Override
@@ -96,7 +103,7 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 	// Send the message to the server
 		  writer.println(RouletteV1Protocol.CMD_RANDOM);
 		  // flush the buffers
-		 flush();
+		  writer.flush();
 		 
 		 RandomCommandResponse answer = JsonObjectMapper.parseJson(reader.readLine(), RandomCommandResponse.class);
 		 
@@ -110,11 +117,14 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
   @Override
   public int getNumberOfStudents() throws IOException {
 	// Send the message to the server
+	  System.out.println("Send info message");
 	  writer.println(RouletteV1Protocol.CMD_INFO);
 	  // flush the buffers
-	 flush();
+	  System.out.println("writer flushed");
+	  writer.flush();
 	 
 	 InfoCommandResponse nbr = JsonObjectMapper.parseJson(reader.readLine(), InfoCommandResponse.class);
+	 System.out.println("Received : " + nbr.toString());
 	 return nbr.getNumberOfStudents();
   }
 
@@ -123,22 +133,12 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 		// Send the message to the server
 	  writer.println(RouletteV1Protocol.CMD_INFO);
 	  // flush the buffers
-	 flush();
+	  writer.flush();
 	 
 	 InfoCommandResponse nbr = JsonObjectMapper.parseJson(reader.readLine(), InfoCommandResponse.class);
 	 return nbr.getProtocolVersion();
   }
   
-  /**
-   * Flush the streams
- * @throws IOException 
-   */
-  private void flush() throws IOException
-  {
-	  writer.flush();
-	  reader.readLine();
-  }
-
 
 
 }
