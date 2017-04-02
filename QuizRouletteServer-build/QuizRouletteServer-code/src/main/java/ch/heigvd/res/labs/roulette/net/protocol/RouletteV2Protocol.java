@@ -4,6 +4,7 @@ package ch.heigvd.res.labs.roulette.net.protocol;
  * This class defines constants for the Roulette Protocol (version 2)
  *
  * @author Olivier Liechti
+ * @author Tony Clavien
  */
 public class RouletteV2Protocol extends RouletteV1Protocol {
 
@@ -11,6 +12,8 @@ public class RouletteV2Protocol extends RouletteV1Protocol {
 
   public final static String CMD_CLEAR = "CLEAR";
   public final static String CMD_LIST = "LIST";
+  
+  public final static int DEFAULT_PORT = 2613;
 
   public static String RESPONSE_CLEAR_DONE = "DATASTORE CLEARED";
 

@@ -2,6 +2,8 @@ package ch.heigvd.res.labs.roulette.net.server;
 
 import ch.heigvd.res.labs.roulette.data.IStudentsStore;
 import ch.heigvd.res.labs.roulette.data.StudentsStoreImpl;
+import ch.heigvd.res.labs.roulette.net.client.RouletteV1ClientImpl;
+import ch.heigvd.res.labs.roulette.net.client.RouletteV2ClientImpl;
 import ch.heigvd.res.labs.roulette.net.protocol.RouletteV1Protocol;
 import ch.heigvd.res.labs.roulette.net.protocol.RouletteV2Protocol;
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.logging.Logger;
  * need "isolated" servers).
  *
  * @author Olivier Liechti
+ * @author Tony Clavien
  */
 public class RouletteServer {
 
@@ -82,6 +85,11 @@ public class RouletteServer {
   public RouletteServer(String protocolVersion) {
     this.listenPort = -1;
     this.protocolVersion = protocolVersion;
+    if (RouletteV1Protocol.VERSION.equals(protocolVersion)) {
+        this.listenPort = RouletteV1Protocol.DEFAULT_PORT;
+      } else {
+        this.listenPort = RouletteV2Protocol.DEFAULT_PORT;
+      }
   }
 
   public void startServer() throws IOException {
