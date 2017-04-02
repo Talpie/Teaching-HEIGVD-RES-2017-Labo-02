@@ -5,6 +5,8 @@ import java.util.List;
 import ch.heigvd.res.labs.roulette.data.Student;
 import ch.heigvd.res.labs.roulette.net.server.RouletteV2ClientHandler.Status;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * This class is used to serialize/deserialize the response sent by the server
  * when processing the "LOAD" command defined in the protocol specification. The
@@ -12,6 +14,7 @@ import ch.heigvd.res.labs.roulette.net.server.RouletteV2ClientHandler.Status;
  * 
  * @author Tony Clavien
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoadCommandResponse {
 	
 	private Status status;
