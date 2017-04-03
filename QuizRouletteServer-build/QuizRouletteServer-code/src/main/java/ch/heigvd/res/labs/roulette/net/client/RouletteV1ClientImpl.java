@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -27,8 +26,8 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 
   private static final Logger LOG = Logger.getLogger(RouletteV1ClientImpl.class.getName());
   private Socket socket = null;
-  private BufferedReader reader = null;
-  private PrintWriter writer = null;
+  protected BufferedReader reader = null;
+  protected PrintWriter writer = null;
 
   @Override
   public void connect(String server, int port) throws IOException {
@@ -138,7 +137,4 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 	 InfoCommandResponse nbr = JsonObjectMapper.parseJson(reader.readLine(), InfoCommandResponse.class);
 	 return nbr.getProtocolVersion();
   }
-  
-
-
 }
